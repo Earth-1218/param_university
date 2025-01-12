@@ -1,0 +1,26 @@
+.dataTables_info {
+    display: none !important;
+}
+
+.container{
+    overflow-y:auto; max-height:80vh;
+}
+
+.sidebar::-webkit-scrollbar{
+    width: 0rem !important;
+    overflow-y:scroll !important;
+    max-height:80vh !important;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 0rem !important;
+}
+
+.container::-webkit-scrollbar {
+    width: 0rem !important;
+}
+
+body {
+    height: 100vh;
+    overflow-y: hidden !important;
+}
