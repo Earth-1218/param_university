@@ -133,7 +133,8 @@
                     @enderror
                 </div>
 
-                <div class="text-center">
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('students.index') }}" class="btn btn-primary" />Back to Students</a>
                     <button type="submit" class="btn btn-success">{{ isset($student) ? 'Update Student' : 'Add Student' }}</button>
                 </div>
             </form>

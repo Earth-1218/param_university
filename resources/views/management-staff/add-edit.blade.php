@@ -2,139 +2,89 @@
 
 @section('content')
 <div class="container">
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-header bg-grey">
-            {{ isset($student) ? 'Edit Student Information' : 'Add Student Information' }}
+            {{ isset($managementstaff) ? 'Edit Staff Information' : 'Add Staff Information' }}
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ isset($student) ? route('students.update', $student->id) : route('students.store') }}">
+            <form method="POST" action="{{ isset($managementstaff) ? route('management-staff.update', $managementstaff->id) : route('management-staff.store') }}">
                 @csrf
-                @if(isset($student))
+                @if(isset($managementstaff))
                     @method('PUT')
                 @endif
-
                 <div class="mb-3">
-                    <label for="enrollment_no" class="form-label">Enrollment No</label>
-                    <input type="text" class="form-control @error('enrollment_no') is-invalid @enderror" id="enrollment_no" name="enrollment_no" value="{{ old('enrollment_no', $student->enrollment_no ?? '') }}" placeholder="Enter enrollment number" required>
-                    @error('enrollment_no')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="course_id" class="form-label">Course ID</label>
-                    <input type="text" class="form-control @error('course_id') is-invalid @enderror" id="course_id" name="course_id" value="{{ old('course_id', $student->course_id ?? '') }}" placeholder="Enter course ID" required>
-                    @error('course_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="name" class="form-label">Student Name</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $student->name ?? '') }}" placeholder="Enter student name" required>
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $managementstaff->name ?? '') }}" placeholder="Enter name" required>
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
-                <div class="mb-3">
-                    <label for="father_name" class="form-label">Father's Name</label>
-                    <input type="text" class="form-control @error('father_name') is-invalid @enderror" id="father_name" name="father_name" value="{{ old('father_name', $student->father_name ?? '') }}" placeholder="Enter father's name" required>
-                    @error('father_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="mother_name" class="form-label">Mother's Name</label>
-                    <input type="text" class="form-control @error('mother_name') is-invalid @enderror" id="mother_name" name="mother_name" value="{{ old('mother_name', $student->mother_name ?? '') }}" placeholder="Enter mother's name" required>
-                    @error('mother_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="aadhaar_no" class="form-label">Aadhaar No</label>
-                    <input type="text" class="form-control @error('aadhaar_no') is-invalid @enderror" id="aadhaar_no" name="aadhaar_no" value="{{ old('aadhaar_no', $student->aadhaar_no ?? '') }}" placeholder="Enter Aadhaar number" required>
-                    @error('aadhaar_no')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
                 <div class="mb-3">
                     <label for="mobile_no" class="form-label">Mobile No</label>
-                    <input type="text" class="form-control @error('mobile_no') is-invalid @enderror" id="mobile_no" name="mobile_no" value="{{ old('mobile_no', $student->mobile_no ?? '') }}" placeholder="Enter mobile number" required>
+                    <input type="text" class="form-control @error('mobile_no') is-invalid @enderror" id="mobile_no" name="mobile_no" value="{{ old('mobile_no', $managementstaff->mobile_no ?? '') }}" placeholder="Enter mobile number" required>
                     @error('mobile_no')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $student->email ?? '') }}" placeholder="Enter email address" required>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $managementstaff->email ?? '') }}" placeholder="Enter email" required>
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="gender" class="form-label">Gender</label>
                     <select class="form-select @error('gender') is-invalid @enderror" id="gender" name="gender" required>
-                        <option value="" disabled {{ old('gender', $student->gender ?? '') == '' ? 'selected' : '' }}>Select gender</option>
-                        <option value="Male" {{ old('gender', $student->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
-                        <option value="Female" {{ old('gender', $student->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
+                        <option value="">Select Gender</option>
+                        <option value="Male" {{ old('gender', $managementstaff->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ old('gender', $managementstaff->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
+                        <option value="Other" {{ old('gender', $managementstaff->gender ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
                     </select>
                     @error('gender')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="dob" class="form-label">Date of Birth</label>
-                    <input type="date" class="form-control @error('dob') is-invalid @enderror" id="dob" name="dob" value="{{ old('dob', $student->dob ?? '') }}" placeholder="Select date of birth" required>
+                    <input type="date" class="form-control @error('dob') is-invalid @enderror" id="dob" name="dob" value="{{ old('dob', $managementstaff->dob ?? '') }}" placeholder="Enter date of birth" required>
                     @error('dob')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="about" class="form-label">About</label>
-                    <textarea class="form-control @error('about') is-invalid @enderror" id="about" name="about" rows="3" placeholder="Write about the student" required>{{ old('about', $student->about ?? '') }}</textarea>
+                    <textarea class="form-control @error('about') is-invalid @enderror" id="about" name="about" placeholder="Enter about" required>{{ old('about', $managementstaff->about ?? '') }}</textarea>
                     @error('about')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
-                    <label for="merital_status" class="form-label">Marital Status</label>
-                    <select class="form-select @error('merital_status') is-invalid @enderror" id="merital_status" name="merital_status" required>
-                        <option value="" disabled {{ old('merital_status', $student->merital_status ?? '') == '' ? 'selected' : '' }}>Select marital status</option>
-                        <option value="unmarried" {{ old('merital_status', $student->merital_status ?? '') == 'unmarried' ? 'selected' : '' }}>Single</option>
-                        <option value="married" {{ old('merital_status', $student->merital_status ?? '') == 'married' ? 'selected' : '' }}>Married</option>
+                    <label for="department" class="form-label">Department</label>
+                    <select class="form-select @error('department') is-invalid @enderror" id="department" name="department" required>
+                        <option value="">Select Department</option>
+                        <option value="HOD" {{ old('department', $managementstaff->department ?? '') == 'hod' ? 'selected' : '' }}>HOD</option>
+                        <option value="Trustie" {{ old('department', $managementstaff->department ?? '') == 'trustie' ? 'selected' : '' }}>Trustie</option>
+                        <option value="Peon" {{ old('department', $managementstaff->department ?? '') == 'peon' ? 'selected' : '' }}>Peon</option>
+                        <option value="Accountant" {{ old('department', $managementstaff->department ?? '') == 'accountant' ? 'selected' : '' }}>Accountant</option>
+                        <option value="Librarien" {{ old('department', $managementstaff->department ?? '') == 'librarien' ? 'selected' : '' }}>Librarien</option>
+                        <option value="Security Guard" {{ old('department', $managementstaff->department ?? '') == 'security_guard' ? 'selected' : '' }}>Security Guard</option>
+                        <option value="Driver" {{ old('department', $managementstaff->department ?? '') == 'driver' ? 'selected' : '' }}>Driver</option>
                     </select>
-                    @error('merital_status')
+                    @error('department')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="joining_date" class="form-label">Joining Date</label>
-                    <input type="date" class="form-control @error('joining_date') is-invalid @enderror" id="joining_date" name="joining_date" value="{{ old('joining_date', isset($student->joining_date) ? \Carbon\Carbon::parse($student->joining_date)->format('Y-m-d') : '') }}" required>
+                    <input type="date" class="form-control @error('joining_date') is-invalid @enderror" id="joining_date" name="joining_date" value="{{ old('joining_date', $managementstaff->joining_date ?? '') }}" placeholder="Enter joining date" required>
                     @error('joining_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
-                <div class="mb-3">
-                    <label for="departure_date" class="form-label">Departure Date</label>
-                    <input type="date" class="form-control @error('departure_date') is-invalid @enderror" id="departure_date" name="departure_date" value="{{ old('departure_date', isset($student->departure_date) ? \Carbon\Carbon::parse($student->departure_date)->format('Y-m-d') : '') }}" required>
-                    @error('departure_date')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="text-center">
-                    <button type="submit" class="btn btn-success">{{ isset($student) ? 'Update Student' : 'Add Student' }}</button>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('management-staff.index') }}" class="btn btn-primary" />Back to Staff</a>
+                    <button type="submit" class="btn btn-success">{{ isset($managementstaff) ? 'Update Student' : 'Add Staff' }}</button>
                 </div>
             </form>
         </div>

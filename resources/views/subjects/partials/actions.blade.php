@@ -1,20 +1,27 @@
-<div class="btn-group" role="group" aria-label="Student Actions">
+@php $recordPrefix = 'students'; $id = $student->id; @endphp
+<div class="btn-group" role="group" aria-label="{{ $recordPrefix }} Actions">
     <!-- Show Button -->
-    <a title="View"  href="{{ route('subjects.show', $subject->id) }}" class="btn btn-success btn-sm">
-        <i class="fas fa-eye"></i> 
+    <a title="View" href="{{ route($recordPrefix . '.show', $id) }}" class="btn btn-success btn-sm">
+        <i class="fas fa-eye"></i>
     </a>
 
     <!-- Edit Button -->
-    <a title="Edit"  href="{{ route('subjects.edit', $subject->id) }}" class="btn btn-primary btn-sm ml-2">
-        <i class="fas fa-edit"></i> 
+    <a title="Edit" href="{{ route($recordPrefix . '.edit', $id) }}" class="btn btn-primary btn-sm ml-2">
+        <i class="fas fa-edit"></i>
     </a>
 
     <!-- Delete Button -->
-    <form action="{{ route('subjects.destroy', $subject->id) }}" method="POST" style="display:inline;">
-        @csrf
-        @method('DELETE')
-        <button title="Delete" type="submit" class="btn btn-danger btn-sm ml-2" onclick="return confirm('Are you sure you want to delete this subject?')">
-            <i class="fas fa-trash"></i> 
-        </button>
-    </form>
+    <button
+        title="Delete"
+        type="button"
+        class="btn btn-danger btn-sm ml-2"
+        onclick="event.preventDefault(); $('#confirm').modal('show');"
+    >
+        <i class="fas fa-trash"></i>
+    </button>
+
+    <!-- Include Delete Confirmation Modal -->
+    @include('common.delete-confirmation', [
+        'route' => route($recordPrefix . '.destroy', $id)
+    ])
 </div>

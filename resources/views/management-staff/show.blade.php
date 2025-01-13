@@ -9,33 +9,9 @@
         <div class="card-body">
             <table class="table table-bordered">
                 <tbody>
-                    <tr >
-                        <th width="30%">ID</th>
-                        <td width="70%">{{ $student->id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Enrollment No</th>
-                        <td>{{ $student->enrollment_no }}</td>
-                    </tr>
-                    <tr>
-                        <th>Course ID</th>
-                        <td>{{ $student->course_id }}</td>
-                    </tr>
                     <tr>
                         <th>Name</th>
                         <td>{{ $student->name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Father's Name</th>
-                        <td>{{ $student->father_name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Mother's Name</th>
-                        <td>{{ $student->mother_name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Aadhaar No</th>
-                        <td>{{ $student->aadhaar_no }}</td>
                     </tr>
                     <tr>
                         <th>Mobile No</th>
@@ -58,16 +34,12 @@
                         <td>{{ $student->about }}</td>
                     </tr>
                     <tr>
-                        <th>Marital Status</th>
-                        <td>{{ $student->merital_status }}</td>
+                        <th>Department</th>
+                        <td>{{ $student->department }}</td>
                     </tr>
                     <tr>
                         <th>Joining Date</th>
                         <td>{{ $student->joining_date }}</td>
-                    </tr>
-                    <tr>
-                        <th>Departure Date</th>
-                        <td>{{ $student->departure_date }}</td>
                     </tr>
                 </tbody>
             </table>
