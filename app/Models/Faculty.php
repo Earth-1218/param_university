@@ -30,8 +30,25 @@ class Faculty extends Authenticatable
         'deleted_at'
     ];
 
-    public function attendance()
-    {
+    protected $appends =  ['course_name', 'subject_name'];
+
+    public function course(){
+        return $this->belongsTo(Course::class);
+    }
+
+    public function subject(){
+        return $this->belongsTo(Subject::class);
+    }
+
+    public function attendance(){
         return $this->hasMany(StudentAttendance::class, 'faculty_id', 'id');
+    }
+
+    public function getCourseNameAttribute(){        
+        return $this->course ? $this->course->name : '';
+    }
+
+    public function getSubjectNameAttribute(){
+        return $this->subject ? $this->subject->name : '';
     }
 }

@@ -11,14 +11,19 @@ class SubjectController extends Controller
 {
     public function index(Request $request)
     {
-        $subjects = Subject::paginate($request->perpage ?? 10);
-        return view('students.index', compact('subjects'));
+        $query = Subject::query();
+        $page = $request->page > 0 ? $request->page : 1; // Default to page 1
+        $limit = $request->length > 0 ? $request->length : 10; // Default to 10 entries per page
+        $offset = ($page - 1) * $limit;
+        $query->skip($offset)->take($limit);
+        $subjects =  $query->paginate($request->perpage ?? 10);
+        return view('subjects.index', compact('subjects'));
     }
 
     public function show($id)
     {
-        $subjects = Subject::find($id);
-        return view('students.show', compact('subject'));
+        $subject = Subject::find($id);
+        return view('subjects.show', compact('subject'));
     }
 
     public function getData(Request $request)
@@ -47,7 +52,7 @@ class SubjectController extends Controller
         $filteredRecords = $query->count();
 
         // Fetch the data for the current page
-        $data = $query->get();
+        $data = $query->orderBy('id','desc')->get();
 
         // Create DataTables response
         return DataTables::of($data)
@@ -70,15 +75,16 @@ class SubjectController extends Controller
 
     public function edit($id)
     {
-       $student = Subject::find($id);
-       return view('subject.add-edit',compact('subject'));
+       $subject = Subject::find($id);
+       return view('subjects.add-edit',compact('subject'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'course_id' => 'required',
-            'name' => 'required'
+            'name' => 'required',
+            'semester' => 'required|in:1,2,3,4,5,6,7,8'
         ]);
 
         Subject::create($validated);
@@ -93,18 +99,15 @@ class SubjectController extends Controller
             'name' => 'required'
         ]);
 
-        $student = Subject::findOrFail($id);
-        $student->update($validated);
+        $lesson = Subject::findOrFail($id);
+        $lesson->update($validated);
 
         return redirect()->route('subjects.index')->with('success', 'Subject updated successfully!');
     }
 
-    public function destroy($id)
+    public function destroy(Subject $subject)
     {
-       $subject = Subject::find($id);
-       $subject->delete();
+       dd($subject);
        return redirect()->route('subjects.index');
     }
-
-
 }

@@ -18,8 +18,7 @@ class FacultyAttendance extends Model
         'deleted_at'
     ];
 
-    public function faculty()
-    {
+    public function faculty(){
         return $this->belongsTo(Student::class);
     }
 }

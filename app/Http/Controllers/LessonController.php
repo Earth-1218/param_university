@@ -17,7 +17,7 @@ class LessonController extends Controller
 
     public function show($id)
     {
-        $student = Lesson::find($id);
+        $lesson = Lesson::find($id);
         return view('lessons.show', compact('lesson'));
     }
 
@@ -36,9 +36,7 @@ class LessonController extends Controller
         if (!empty($request->search)) {
             $searchValue = $request->search;
             $query->where(function ($q) use ($searchValue) {
-                $q->where('name', 'like', "%{$searchValue}%")
-                    ->orWhere('enrollment_no', 'like', "%{$searchValue}%")
-                    ->orWhere('email', 'like', "%{$searchValue}%");
+                $q->where('name', 'like', "%{$searchValue}%");
             });
         }
 
@@ -53,7 +51,7 @@ class LessonController extends Controller
 
         // Create DataTables response
         return DataTables::of($data)
-            ->addColumn('actions', function ($student) {
+            ->addColumn('actions', function ($lesson) {
                 return view('lessons.partials.actions', compact('lesson'))->render();
             })
             ->rawColumns(['actions']) // Allow HTML in 'actions' column
@@ -72,28 +70,29 @@ class LessonController extends Controller
 
     public function edit($id)
     {
-        $student = Lesson::find($id);
+        $lesson = Lesson::find($id);
         return view('lessons.add-edit', compact('lesson'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required|unique:lessons',
-            'course_id' => 'required',
+            'subject_id' => 'required|numeric',
             'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required|unique:lessons',
-            'mobile_no' => 'required',
-            'email' => 'required|email|unique:lessons',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'headline' =>'required',
+            'description'=>'required',
+            'notes' =>'required',
+            'downloadable_pdf' =>'required|file|mimes:pdf',
         ]);
+
+        if ($request->hasFile('downloadable_pdf')) {
+            $file = $request->file('downloadable_pdf');
+            $timestamp = time();
+            $extension = $file->getClientOriginalExtension();
+            $filename = "lesson_" . $timestamp . "." . $extension;
+            $validated['downloadable_pdf'] = $filename;
+            $file->storeAs('lessons', $filename, 'public');
+        }
 
         Lesson::create($validated);
 
@@ -108,12 +107,14 @@ class LessonController extends Controller
             'headline' =>'required',
             'description'=>'required',
             'notes' =>'required',
-            'downloadable_pdf' =>'required|file|pdf',
+            'downloadable_pdf' =>'required|file|mimes:pdf',
         ]);
         
         if ($request->hasFile('downloadable_pdf')) {
             $file = $request->file('downloadable_pdf');
-            $filename = $file->getClientOriginalName();
+            $timestamp = time();
+            $extension = $file->getClientOriginalExtension();
+            $filename = "lesson_" . $timestamp . "." . $extension;
             $validated['downloadable_pdf'] = $filename;
             $file->storeAs('lessons', $filename, 'public');
         }

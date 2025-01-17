@@ -20,8 +20,7 @@ class Course extends Model
         'deleted_at',
     ];
 
-    public function subjects()
-    {
+    public function subjects(){
         return $this->hasMany(Subject::class,'id','course_id');
     }
 }

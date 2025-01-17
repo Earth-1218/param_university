@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-header bg-grey">
             Category Information
         </div>

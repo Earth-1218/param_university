@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="container">
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-header bg-grey">
             {{ isset($category) ? 'Edit category Information' : 'Add category Information' }}
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ isset($category) ? route('categories.update', $category->id) : route('categorys.store') }}">
+            <form method="POST" action="{{ isset($category) ? route('categories.update', $category->id) : route('categories.store') }}">
                 @csrf
                 @if(isset($category))
                     @method('PUT')
@@ -21,8 +21,9 @@
                     @enderror
                 </div>
 
-                <div class="text-center">
-                    <button type="submit" class="btn btn-success">{{ isset($category) ? 'Update category' : 'Add category' }}</button>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('categories.index') }}" class="btn btn-primary">Back to List</a>
+                    <button type="submit" class="btn btn-success">{{ isset($category) ? 'Update Category' : 'Add Category' }}</button>
                 </div>
             </form>
         </div>

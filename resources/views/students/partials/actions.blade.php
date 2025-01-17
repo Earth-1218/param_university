@@ -1,4 +1,5 @@
 @php $recordPrefix = 'students'; $id = $student->id; @endphp
+
 <div class="btn-group" role="group" aria-label="{{ $recordPrefix }} Actions">
     <!-- Show Button -->
     <a title="View" href="{{ route($recordPrefix . '.show', $id) }}" class="btn btn-success btn-sm">
@@ -15,13 +16,12 @@
         title="Delete"
         type="button"
         class="btn btn-danger btn-sm ml-2"
-        onclick="event.preventDefault(); $('#confirm').modal('show');"
-    >
+        onclick="event.preventDefault(); $('#confirm').modal('show');">
         <i class="fas fa-trash"></i>
     </button>
 
     <!-- Include Delete Confirmation Modal -->
     @include('common.delete-confirmation', [
-        'route' => route($recordPrefix . '.destroy', $id)
+        'route' => route($recordPrefix . '.destroy', $student->id)
     ])
 </div>

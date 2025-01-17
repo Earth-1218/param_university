@@ -26,7 +26,8 @@
                 recordsLoader.hide();
                 console.log(response.json);
                 totalRecordsElements.text(response.json.recordsTotal);
-            }
+            },
+            // order: [[0, 'desc']] // Set the order to descending
         });
 
         // Show loader inside table when processing starts

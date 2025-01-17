@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use App\Models\Income;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -10,19 +10,19 @@ class IncomeController extends Controller
 {
     public function index(Request $request)
     {
-        $students = Student::paginate($request->perpage ?? 10);
-        return view('students.index', compact('students'));
+        $incomes = Income::paginate($request->perpage ?? 10);
+        return view('incomes.index', compact('incomes'));
     }
 
     public function show($id)
     {
-        $student = Student::find($id);
-        return view('students.show', compact('student'));
+        $income = Income::find($id);
+        return view('incomes.show', compact('income'));
     }
 
     public function getData(Request $request)
     {
-        $query = Student::query();
+        $query = Income::query();
 
         // Determine the offset and limit for custom pagination
         $page = $request->page > 0 ? $request->page : 1; // Default to page 1
@@ -35,14 +35,14 @@ class IncomeController extends Controller
         if (!empty($request->search)) {
             $searchValue = $request->search;
             $query->where(function ($q) use ($searchValue) {
-                $q->where('name', 'like', "%{$searchValue}%")
-                    ->orWhere('enrollment_no', 'like', "%{$searchValue}%")
-                    ->orWhere('email', 'like', "%{$searchValue}%");
+                $q->where('category', 'like', "%{$searchValue}%")
+                    ->orWhere('remarks', 'like', "%{$searchValue}%")
+                    ->orWhere('date', 'like', "%{$searchValue}%");
             });
         }
 
         // Get the total count for pagination (ignores skip and take)
-        $totalRecords = Student::count();
+        $totalRecords = Income::count();
 
         // Get the total count after applying filters
         $filteredRecords = $query->count();
@@ -52,8 +52,8 @@ class IncomeController extends Controller
 
         // Create DataTables response
         return DataTables::of($data)
-            ->addColumn('actions', function ($student) {
-                return view('students.partials.actions', compact('student'))->render();
+            ->addColumn('actions', function ($income) {
+                return view('incomes.partials.actions', compact('income'))->render();
             })
             ->rawColumns(['actions']) // Allow HTML in 'actions' column
             ->with([
@@ -66,70 +66,55 @@ class IncomeController extends Controller
 
     public function add()
     {
-        return view('students.add-edit');
+        return view('incomes.add-edit');
     }
 
     public function edit($id)
     {
-       $student = Student::find($id);
-       return view('students.add-edit',compact('student'));
+       $income = Income::find($id);
+       return view('incomes.add-edit',compact('income'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required|unique:students',
-            'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required|unique:students',
-            'mobile_no' => 'required',
-            'email' => 'required|email|unique:students',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'sponsor_id' => 'required',
+            'category' => 'required',
+            'remarks' => 'required',
+            'date' => 'required|date',
+            'payment_instrument' => 'required',
+            'payment_through' => 'required',
+            'payment_ref_no' => 'required',
         ]);
 
-        Student::create($validated);
+        Income::create($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student added successfully!');
+        return redirect()->route('incomes.index')->with('success', 'Income added successfully!');
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required',
-            'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required',
-            'mobile_no' => 'required',
-            'email' => 'required|email',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'sponsor_id' => 'required',
+            'category' => 'required',
+            'remarks' => 'required',
+            'date' => 'required|date',
+            'payment_instrument' => 'required',
+            'payment_through' => 'required',
+            'payment_ref_no' => 'required',
         ]);
 
-        $student = Student::findOrFail($id);
-        $student->update($validated);
+        $income = Income::find($id);
+        $income->update($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student updated successfully!');
+        return redirect()->route('incomes.index')->with('success', 'Income updated successfully!');
     }
 
     public function destroy($id)
     {
-       $student = Student::find($id);
-       $student->delete();
-       return redirect()->route('students.index');
+        $income = Income::find($id);
+        $income->delete();
+
+        return redirect()->route('incomes.index')->with('success', 'Income deleted successfully!');
     }
-
-
 }

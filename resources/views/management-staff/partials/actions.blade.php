@@ -1,4 +1,7 @@
-@php $recordPrefix = 'students'; $id = $student->id; @endphp
+@php
+    $recordPrefix = 'management-staff';
+    $id = $managementstaff->id;
+@endphp
 <div class="btn-group" role="group" aria-label="{{ $recordPrefix }} Actions">
     <!-- Show Button -->
     <a title="View" href="{{ route($recordPrefix . '.show', $id) }}" class="btn btn-success btn-sm">
@@ -11,17 +14,16 @@
     </a>
 
     <!-- Delete Button -->
-    <button
-        title="Delete"
-        type="button"
-        class="btn btn-danger btn-sm ml-2"
-        onclick="event.preventDefault(); $('#confirm').modal('show');"
-    >
+    <button title="Delete" type="button" class="btn btn-danger btn-sm ml-2" href="#confirm"
+        data-id="{{ $id }}"
+        onclick="event.preventDefault();    
+             $('#confirm').modal('show').find('input[name=id]').val('{{ $id }}');
+             $('#confirm').find('form')
+             .prop('action', '{{ route($recordPrefix . '.destroy', $id) }}')
+             .prop('method', 'DELETE')">
         <i class="fas fa-trash"></i>
     </button>
 
     <!-- Include Delete Confirmation Modal -->
-    @include('common.delete-confirmation', [
-        'route' => route($recordPrefix . '.destroy', $id)
-    ])
+    @include('common.delete-confirmation')
 </div>

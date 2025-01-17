@@ -21,8 +21,11 @@ class Lesson extends Model
         'deleted_at'
     ];
 
-    public function subject()
-    {
+    public function subject(){
         return $this->belongsTo(Subject::class);
+    }
+
+    public function getCreatedAtAttribute(){
+        return \Carbon\Carbon::parse($this->attributes['created_at'])->format('d-m-y');
     }
 }

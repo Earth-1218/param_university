@@ -7,8 +7,8 @@
                 <div class="card">
                     <div class="card-header ">
                         <div class="d-flex justify-content-between">
-                            <p>Students</p>
-                            <a href="{{ route('students.add') }}" class="btn btn-primary">{{ __('Add Student') }}</a>
+                            <p>Incomes</p>
+                            <a href="{{ route('incomes.add') }}" class="btn btn-primary">{{ __('Add Income') }}</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -18,17 +18,16 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="students-table" class="table table-striped table-bordered" style="width:100%">
+                            <table id="incomes-table" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Enrollment No</th>
-                                        <th>Name</th>
-                                        <th>Mobile No</th>
-                                        <th>Email</th>
-                                        <th>Gender</th>
-                                        <th>Joining Date</th>
-                                        <th>Departure Date</th>
-                                        <th>Actions</th>
+                                        <th>sponsor_id</th>
+                                        <th>category</th>
+                                        <th>remarks</th>
+                                        <th>date</th>
+                                        <th>payment_instrument</th>
+                                        <th>payment_through</th>
+                                        <th>payment_ref_no</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -37,26 +36,25 @@
                                             <div id="loader" style="text-align: center;">
                                                 <p>Loading...</p>
                                             </div>
-                                        </td>
+                                        </th>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th>Enrollment No</th>
-                                        <th>Name</th>
-                                        <th>Mobile No</th>
-                                        <th>Email</th>
-                                        <th>Gender</th>
-                                        <th>Joining Date</th>
-                                        <th>Departure Date</th>
-                                        <th>Actions</th>
+                                        <th>sponsor_id</th> 
+                                        <th>category</th>   
+                                        <th>remarks</th>    
+                                        <th>date</th>   
+                                        <th>payment_instrument</th> 
+                                        <th>payment_through</th>    
+                                        <th>payment_ref_no</th>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            @include('common.entries', ['records' => $students])
-                            @include('common.pagination', ['records' => $students])
+                            @include('common.entries', ['records' => $incomes])
+                            @include('common.pagination', ['records' => $incomes])
                         </div>
                     </div>
                 </div>
@@ -68,15 +66,15 @@
     @push('scripts')
         @php
             $options = [
-                'records_prefix' => 'students',
+                'records_prefix' => 'incomes',
                 'columns' => [
-                    ['data' => 'enrollment_no', 'name' => 'enrollment_no'],
-                    ['data' => 'name', 'name' => 'name'],
-                    ['data' => 'mobile_no', 'name' => 'mobile_no'],
-                    ['data' => 'email', 'name' => 'email'],
-                    ['data' => 'gender', 'name' => 'gender'],
-                    ['data' => 'joining_date', 'name' => 'joining_date'],
-                    ['data' => 'departure_date', 'name' => 'departure_date'],
+                    ['data' => 'sponsor_id', 'name' => 'sponsor_id'],
+                    ['data' => 'category', 'name' => 'category'],
+                    ['data' => 'remarks', 'name' => 'remarks'],
+                    ['data' => 'date', 'name' => 'date'],
+                    ['data' => 'payment_instrument', 'name' => 'payment_instrument'],
+                    ['data' => 'payment_through', 'name' => 'payment_through'],
+                    ['data' => 'payment_ref_no', 'name' => 'payment_ref_no'],
                     ['data' => 'actions', 'name' => 'actions', 'orderable' => false, 'searchable' => false],
                 ],
             ];

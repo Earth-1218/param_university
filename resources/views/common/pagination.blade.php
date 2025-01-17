@@ -1,4 +1,4 @@
-   {{-- Custom Pagination --}}
+   {{-- //Custom Pagination --}}
    @if ($records->hasPages())
    <nav aria-label="Page navigation">
        <ul class="pagination justify-content-end">

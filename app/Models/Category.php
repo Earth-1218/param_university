@@ -15,4 +15,8 @@ class Category extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function getCreatedAtAttribute(){
+        return \Carbon\Carbon::parse($this->attributes['created_at'])->format('d-m-y');
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -10,19 +10,19 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $students = Student::paginate($request->perpage ?? 10);
-        return view('students.index', compact('students'));
+        $categories = Category::paginate($request->perpage ?? 10);
+        return view('categories.index', compact('categories'));
     }
 
     public function show($id)
     {
-        $student = Student::find($id);
-        return view('students.show', compact('student'));
+        $category = category::find($id);
+        return view('categories.show', compact('category'));
     }
 
     public function getData(Request $request)
     {
-        $query = Student::query();
+        $query = category::query();
 
         // Determine the offset and limit for custom pagination
         $page = $request->page > 0 ? $request->page : 1; // Default to page 1
@@ -35,14 +35,12 @@ class CategoryController extends Controller
         if (!empty($request->search)) {
             $searchValue = $request->search;
             $query->where(function ($q) use ($searchValue) {
-                $q->where('name', 'like', "%{$searchValue}%")
-                    ->orWhere('enrollment_no', 'like', "%{$searchValue}%")
-                    ->orWhere('email', 'like', "%{$searchValue}%");
+                $q->where('name', 'like', "%{$searchValue}%");
             });
         }
 
         // Get the total count for pagination (ignores skip and take)
-        $totalRecords = Student::count();
+        $totalRecords = category::count();
 
         // Get the total count after applying filters
         $filteredRecords = $query->count();
@@ -52,8 +50,8 @@ class CategoryController extends Controller
 
         // Create DataTables response
         return DataTables::of($data)
-            ->addColumn('actions', function ($student) {
-                return view('students.partials.actions', compact('student'))->render();
+            ->addColumn('actions', function ($category) {
+                return view('categories.partials.actions', compact('category'))->render();
             })
             ->rawColumns(['actions']) // Allow HTML in 'actions' column
             ->with([
@@ -66,70 +64,42 @@ class CategoryController extends Controller
 
     public function add()
     {
-        return view('students.add-edit');
+        return view('categories.add-edit');
     }
 
     public function edit($id)
     {
-       $student = Student::find($id);
-       return view('students.add-edit',compact('student'));
+       $category = category::find($id);
+       return view('categories.add-edit',compact('category'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required|unique:students',
-            'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required|unique:students',
-            'mobile_no' => 'required',
-            'email' => 'required|email|unique:students',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'name' => 'required'
         ]);
 
-        Student::create($validated);
+        category::create($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student added successfully!');
+        return redirect()->route('categories.index')->with('success', 'category added successfully!');
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required',
-            'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required',
-            'mobile_no' => 'required',
-            'email' => 'required|email',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+          'name' => 'required'
         ]);
 
-        $student = Student::findOrFail($id);
-        $student->update($validated);
+        $category = category::findOrFail($id);
+        $category->update($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student updated successfully!');
+        return redirect()->route('categories.index')->with('success', 'category updated successfully!');
     }
 
     public function destroy($id)
     {
-       $student = Student::find($id);
-       $student->delete();
-       return redirect()->route('students.index');
+       $category = category::find($id);
+       $category->delete();
+       return redirect()->route('categories.index');
     }
-
-
 }

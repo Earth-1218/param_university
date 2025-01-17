@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use App\Models\Expense;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -10,19 +10,19 @@ class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
-        $students = Student::paginate($request->perpage ?? 10);
-        return view('students.index', compact('students'));
+        $expenses = Expense::paginate($request->perpage ?? 10);
+        return view('expenses.index', compact('expenses'));
     }
 
     public function show($id)
     {
-        $student = Student::find($id);
-        return view('students.show', compact('student'));
+        $expense = Expense::find($id);
+        return view('expenses.show', compact('expense'));
     }
 
     public function getData(Request $request)
     {
-        $query = Student::query();
+        $query = Expense::query();
 
         // Determine the offset and limit for custom pagination
         $page = $request->page > 0 ? $request->page : 1; // Default to page 1
@@ -35,14 +35,14 @@ class ExpenseController extends Controller
         if (!empty($request->search)) {
             $searchValue = $request->search;
             $query->where(function ($q) use ($searchValue) {
-                $q->where('name', 'like', "%{$searchValue}%")
-                    ->orWhere('enrollment_no', 'like', "%{$searchValue}%")
-                    ->orWhere('email', 'like', "%{$searchValue}%");
+                $q->where('category', 'like', "%{$searchValue}%")
+                    ->orWhere('remarks', 'like', "%{$searchValue}%")
+                    ->orWhere('date', 'like', "%{$searchValue}%");
             });
         }
 
         // Get the total count for pagination (ignores skip and take)
-        $totalRecords = Student::count();
+        $totalRecords = Expense::count();
 
         // Get the total count after applying filters
         $filteredRecords = $query->count();
@@ -52,8 +52,8 @@ class ExpenseController extends Controller
 
         // Create DataTables response
         return DataTables::of($data)
-            ->addColumn('actions', function ($student) {
-                return view('students.partials.actions', compact('student'))->render();
+            ->addColumn('actions', function ($expense) {
+                return view('expenses.partials.actions', compact('expense'))->render();
             })
             ->rawColumns(['actions']) // Allow HTML in 'actions' column
             ->with([
@@ -66,70 +66,53 @@ class ExpenseController extends Controller
 
     public function add()
     {
-        return view('students.add-edit');
+        return view('expenses.add-edit');
     }
 
     public function edit($id)
     {
-       $student = Student::find($id);
-       return view('students.add-edit',compact('student'));
+       $expense = Expense::find($id);
+       return view('expenses.add-edit',compact('expense'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required|unique:students',
-            'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required|unique:students',
-            'mobile_no' => 'required',
-            'email' => 'required|email|unique:students',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'category' => 'required',
+            'remarks' => 'required',
+            'date' => 'required|date',
+            'payment_instrument' => 'required',
+            'payment_through' => 'required',
+            'payment_ref_no' => 'required',
         ]);
 
-        Student::create($validated);
+        Expense::create($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student added successfully!');
+        return redirect()->route('expenses.index')->with('success', 'Expense added successfully!');
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required',
-            'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required',
-            'mobile_no' => 'required',
-            'email' => 'required|email',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'category' => 'required',
+            'remarks' => 'required',
+            'date' => 'required|date',
+            'payment_instrument' => 'required',
+            'payment_through' => 'required',
+            'payment_ref_no' => 'required',
         ]);
 
-        $student = Student::findOrFail($id);
-        $student->update($validated);
+        $expense = Expense::find($id);
+        $expense->update($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student updated successfully!');
+        return redirect()->route('expenses.index')->with('success', 'Expense updated successfully!');
     }
 
     public function destroy($id)
     {
-       $student = Student::find($id);
-       $student->delete();
-       return redirect()->route('students.index');
+        $expense = Expense::find($id);
+        $expense->delete();
+
+        return redirect()->route('expenses.index')->with('success', 'Expense deleted successfully!');
     }
-
-
 }

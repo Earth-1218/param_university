@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use App\Models\Lecture;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -10,19 +10,19 @@ class LectureController extends Controller
 {
     public function index(Request $request)
     {
-        $students = Student::paginate($request->perpage ?? 10);
-        return view('students.index', compact('students'));
+        $lectures = Lecture::paginate($request->perpage ?? 10);
+        return view('lectures.index', compact('lectures'));
     }
 
     public function show($id)
     {
-        $student = Student::find($id);
-        return view('students.show', compact('student'));
+        $lecture = Lecture::find($id);
+        return view('lectures.show', compact('lecture'));
     }
 
     public function getData(Request $request)
     {
-        $query = Student::query();
+        $query = Lecture::query();
 
         // Determine the offset and limit for custom pagination
         $page = $request->page > 0 ? $request->page : 1; // Default to page 1
@@ -35,14 +35,19 @@ class LectureController extends Controller
         if (!empty($request->search)) {
             $searchValue = $request->search;
             $query->where(function ($q) use ($searchValue) {
-                $q->where('name', 'like', "%{$searchValue}%")
-                    ->orWhere('enrollment_no', 'like', "%{$searchValue}%")
-                    ->orWhere('email', 'like', "%{$searchValue}%");
+                $q->where('title', 'like', "%{$searchValue}%")
+                    ->orWhere('course_id', 'like', "%{$searchValue}%")
+                    ->orWhere('subject_id', 'like', "%{$searchValue}%")
+                    ->orWhere('start', 'like', "%{$searchValue}%")
+                    ->orWhere('end', 'like', "%{$searchValue}%")
+                    ->orWhere('duration', 'like', "%{$searchValue}%")
+                    ->orWhere('total_marks', 'like', "%{$searchValue}%")
+                    ->orWhere('passing_marks', 'like', "%{$searchValue}%");
             });
         }
 
         // Get the total count for pagination (ignores skip and take)
-        $totalRecords = Student::count();
+        $totalRecords = Lecture::count();
 
         // Get the total count after applying filters
         $filteredRecords = $query->count();
@@ -64,72 +69,61 @@ class LectureController extends Controller
             ->make(true);
     }
 
+    public function create()
+    {
+        return view('lectures.add-edit');
+    }
+
     public function add()
     {
-        return view('students.add-edit');
+        return view('lectures.add-edit');
     }
 
     public function edit($id)
     {
-       $student = Student::find($id);
-       return view('students.add-edit',compact('student'));
+        $lecture = Lecture::find($id);
+        return view('lectures.add-edit', compact('lecture'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required|unique:students',
-            'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required|unique:students',
-            'mobile_no' => 'required',
-            'email' => 'required|email|unique:students',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'faculty_id' => 'required|integer',
+            'course_id' => 'required|integer',
+            'subject_id' => 'required|integer',
+            'lesson_id' => 'required|integer',
+            'duration' => 'required|integer',
+            'comments' => 'required',
+            'status' => 'required|in:pening,ongoing,completed',
         ]);
 
-        Student::create($validated);
+        Lecture::create($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student added successfully!');
+        return redirect()->route('lectures.index')->with('success', 'Lecture added successfully!');
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required',
-            'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required',
-            'mobile_no' => 'required',
-            'email' => 'required|email',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'faculty_id' => 'required|integer',
+            'course_id' => 'required|integer',
+            'subject_id' => 'required|integer',
+            'lesson_id' => 'required|integer',
+            'duration' => 'required|integer',
+            'comments' => 'required',
+            'status' => 'required|in:pening,ongoing,completed',
         ]);
 
-        $student = Student::findOrFail($id);
-        $student->update($validated);
+        $lecture = Lecture::find($id);
+        $lecture->update($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student updated successfully!');
+        return redirect()->route('lectures.index')->with('success', 'Lecture updated successfully!');
     }
 
     public function destroy($id)
     {
-       $student = Student::find($id);
-       $student->delete();
-       return redirect()->route('students.index');
+        $lecture = Lecture::find($id);
+        $lecture->delete();
+        return redirect()->route('lectures.index')->with('success', 'Lecture deleted successfully!');
     }
-
-
 }

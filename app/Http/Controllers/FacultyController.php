@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -10,19 +10,19 @@ class FacultyController extends Controller
 {
     public function index(Request $request)
     {
-        $students = Student::paginate($request->perpage ?? 10);
-        return view('students.index', compact('students'));
+        $faculties = Faculty::paginate($request->perpage ?? 10);
+        return view('faculties.index', compact('faculties'));
     }
 
     public function show($id)
     {
-        $student = Student::find($id);
-        return view('students.show', compact('student'));
+        $faculty = Faculty::find($id);
+        return view('faculties.show', compact('faculty'));
     }
 
     public function getData(Request $request)
     {
-        $query = Student::query();
+        $query = Faculty::query();
 
         // Determine the offset and limit for custom pagination
         $page = $request->page > 0 ? $request->page : 1; // Default to page 1
@@ -35,14 +35,12 @@ class FacultyController extends Controller
         if (!empty($request->search)) {
             $searchValue = $request->search;
             $query->where(function ($q) use ($searchValue) {
-                $q->where('name', 'like', "%{$searchValue}%")
-                    ->orWhere('enrollment_no', 'like', "%{$searchValue}%")
-                    ->orWhere('email', 'like', "%{$searchValue}%");
+                $q->where('name', 'like', "%{$searchValue}%");
             });
         }
 
         // Get the total count for pagination (ignores skip and take)
-        $totalRecords = Student::count();
+        $totalRecords = Faculty::count();
 
         // Get the total count after applying filters
         $filteredRecords = $query->count();
@@ -52,8 +50,8 @@ class FacultyController extends Controller
 
         // Create DataTables response
         return DataTables::of($data)
-            ->addColumn('actions', function ($student) {
-                return view('students.partials.actions', compact('student'))->render();
+            ->addColumn('actions', function ($faculty) {
+                return view('faculties.partials.actions', compact('faculty'))->render();
             })
             ->rawColumns(['actions']) // Allow HTML in 'actions' column
             ->with([
@@ -66,69 +64,67 @@ class FacultyController extends Controller
 
     public function add()
     {
-        return view('students.add-edit');
+        return view('faculties.add-edit');
     }
 
     public function edit($id)
     {
-       $student = Student::find($id);
-       return view('students.add-edit',compact('student'));
+       $faculty = Faculty::find($id);
+       return view('faculties.add-edit',compact('faculty'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required|unique:students',
             'course_id' => 'required',
+            'subject_id' => 'required',
             'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required|unique:students',
             'mobile_no' => 'required',
-            'email' => 'required|email|unique:students',
+            'email' => 'required',
             'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
+            'dob' => 'required',
             'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'designation' => 'required',
+            'about' => 'required',
+            'joining_date' => 'required',
+            'departure_date' => 'required',
+            'experience' => 'required',
         ]);
 
-        Student::create($validated);
+        Faculty::create($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student added successfully!');
+        return redirect()->route('faculties.index')->with('success', 'faculty added successfully!');
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required',
             'course_id' => 'required',
+            'subject_id' => 'required',
             'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required',
             'mobile_no' => 'required',
-            'email' => 'required|email',
+            'email' => 'required',
             'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
+            'dob' => 'required',
             'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'designation' => 'required',
+            'about' => 'required',
+            'joining_date' => 'required',
+            'departure_date' => 'required',
+            'experience' => 'required',
         ]);
 
-        $student = Student::findOrFail($id);
-        $student->update($validated);
+        $faculty = Faculty::findOrFail($id);
+        $faculty->update($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student updated successfully!');
+        return redirect()->route('faculties.index')->with('success', 'faculty updated successfully!');
     }
 
     public function destroy($id)
     {
-       $student = Student::find($id);
-       $student->delete();
-       return redirect()->route('students.index');
+       $faculty = Faculty::find($id);
+       $faculty->delete();
+       return redirect()->route('faculties.index');
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{AuthController, StudentController, CategoryController, CourseController, DonationController, EventController, ExamController, ExpenseController, FacultyController, HostelController, IncomeController, LectureController, LessonController, ManagementStaffController};
+use App\Http\Controllers\{AuthController, StudentController, CategoryController, CourseController, DonationController, EventController, ExamController, ExpenseController, FacultyController, HostelController, IncomeController, LectureController, LessonController, ManagementStaffController, SettingController, SubjectController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +31,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/index', [SettingController::class, 'index'])->name('settings.index');
+    });
 
     Route::prefix('students')->group(function () {
         Route::get('/data', [StudentController::class, 'getData'])->name('students.data');
@@ -162,6 +166,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/{lecture}/edit', [LectureController::class, 'edit'])->name('lectures.edit');
         Route::put('/{lecture}', [LectureController::class, 'update'])->name('lectures.update');
         Route::delete('/{lecture}', [LectureController::class, 'destroy'])->name('lectures.destroy');
+    });
+
+    Route::prefix('subjects')->group(function () {
+        Route::get('/data', [SubjectController::class, 'getData'])->name('subjects.data');
+        Route::get('/add', [SubjectController::class, 'add'])->name('subjects.add');
+        Route::get('/', [SubjectController::class, 'index'])->name('subjects.index');
+        Route::get('/create', [SubjectController::class, 'create'])->name('subjects.create');
+        Route::post('/store', [SubjectController::class, 'store'])->name('subjects.store');
+        Route::get('/{subject}', [SubjectController::class, 'show'])->name('subjects.show');
+        Route::get('/{subject}/edit', [SubjectController::class, 'edit'])->name('subjects.edit');
+        Route::put('/{subject}', [SubjectController::class, 'update'])->name('subjects.update');
+        Route::delete('/{subject}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
     });
 
     Route::prefix('lessons')->group(function () {

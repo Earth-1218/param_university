@@ -4,11 +4,11 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card mt-3">
                     <div class="card-header ">
                         <div class="d-flex justify-content-between">
                             <p>Categories</p>
-                            <a href="{{ route('students.add') }}" class="btn btn-primary">{{ __('Add Category') }}</a>
+                            <a href="{{ route('categories.add') }}" class="btn btn-primary">{{ __('Add Category') }}</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -18,7 +18,7 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="students-table" class="table table-striped table-bordered" style="width:100%">
+                            <table id="categories-table" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Id</th>
@@ -60,11 +60,11 @@
     @push('scripts')
         @php
             $options = [
-                'records_prefix' => 'students',
+                'records_prefix' => 'categories',
                 'columns' => [
-                    ['data' => 'id', 'name' => 'enrollment_no'],
+                    ['data' => 'id', 'name' => 'id'],
                     ['data' => 'name', 'name' => 'name'],
-                    ['data' => 'created_at', 'name' => 'created_at']
+                    ['data' => 'created_at', 'name' => 'created_at'],
                     ['data' => 'actions', 'name' => 'actions', 'orderable' => false, 'searchable' => false],
                 ],
             ];

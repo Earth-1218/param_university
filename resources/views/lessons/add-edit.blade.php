@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container">
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-header bg-grey">
-            {{ isset($lesson) ? 'Edit Student Information' : 'Add Student Information' }}
+            {{ isset($lesson) ? 'Edit Lesson Information' : 'Add Lesson Information' }}
         </div>
         <div class="card-body">
             <form method="POST" action="{{ isset($lesson) ? route('lessons.update', $lesson->id) : route('lessons.store') }}" enctype="multipart/form-data">
@@ -66,7 +66,8 @@
                     @enderror
                 </div>
 
-                <div class="text-right">
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('lessons.index') }}" class="btn btn-primary">Back to List</a>
                     <button type="submit" class="btn btn-success">{{ isset($lesson) ? 'Update Lesson' : 'Add Lesson' }}</button>
                 </div>
             </form>

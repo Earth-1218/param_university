@@ -7,8 +7,8 @@
                 <div class="card">
                     <div class="card-header ">
                         <div class="d-flex justify-content-between">
-                            <p>Students</p>
-                            <a href="{{ route('students.add') }}" class="btn btn-primary">{{ __('Add Student') }}</a>
+                            <p>Expenses</p>
+                            <a href="{{ route('expenses.add') }}" class="btn btn-primary">{{ __('Add Expense') }}</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -18,7 +18,7 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="students-table" class="table table-striped table-bordered" style="width:100%">
+                            <table id="expenses-table" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Enrollment No</th>
@@ -55,8 +55,8 @@
                             </table>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            @include('common.entries', ['records' => $students])
-                            @include('common.pagination', ['records' => $students])
+                            @include('common.entries', ['records' => $expenses])
+                            @include('common.pagination', ['records' => $expenses])
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
     @push('scripts')
         @php
             $options = [
-                'records_prefix' => 'students',
+                'records_prefix' => 'expenses',
                 'columns' => [
                     ['data' => 'enrollment_no', 'name' => 'enrollment_no'],
                     ['data' => 'name', 'name' => 'name'],

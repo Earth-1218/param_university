@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card mt-3">
                     <div class="card-header ">
                         <div class="d-flex justify-content-between">
                             <p>Lessons</p>
@@ -18,7 +18,7 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="students-table" class="table table-striped table-bordered" style="width:100%">
+                            <table id="lessons-table" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Subject ID</th>

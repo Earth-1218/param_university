@@ -88,39 +88,32 @@ class ManagementStaffController extends Controller
         ]);
 
         ManagementTeam::create($validated);
-
         return redirect()->route('management-staff.index')->with('success', 'Staff added successfully!');
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required',
-            'course_id' => 'required',
             'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required',
             'mobile_no' => 'required',
             'email' => 'required|email',
             'gender' => 'required',
             'dob' => 'required|date',
             'about' => 'nullable',
-            'merital_status' => 'required',
+            'department' => 'required',
             'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
         ]);
 
-        $student = Student::findOrFail($id);
-        $student->update($validated);
+        $managementstaff = ManagementTeam::find($id);
+        $managementstaff->update($validated);
 
         return redirect()->route('management-staff.index')->with('success', 'Staff updated successfully!');
     }
 
     public function destroy($id)
     {
-       $student = Student::find($id);
-       $student->delete();
+       $managementstaff = ManagementTeam::find($id);
+       $managementstaff->delete();
        return redirect()->route('management-staff.index');
     }
 }

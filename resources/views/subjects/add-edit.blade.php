@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-header bg-grey">
             {{ isset($subject) ? 'Edit Subject Information' : 'Add Subject Information' }}
         </div>
@@ -32,7 +32,15 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="text-center">
+                     <div class="mb-3">
+                    <label for="semester" class="form-label">semester</label>
+                    <input type="number" class="form-control @error('semester') is-invalid @enderror" id="semester" name="semester" value="{{ old('semester', $subject->semester ?? '') }}" placeholder="Enter semester" required>
+                    @error('semester')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('lessons.index') }}" class="btn btn-primary">Back to List</a>
                     <button type="submit" class="btn btn-success">{{ isset($subject) ? 'Update Subject' : 'Add Subject' }}</button>
                 </div>
             </form>

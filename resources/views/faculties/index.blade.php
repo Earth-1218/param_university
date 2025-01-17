@@ -4,11 +4,11 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card mt-3">
                     <div class="card-header ">
                         <div class="d-flex justify-content-between">
-                            <p>Students</p>
-                            <a href="{{ route('students.add') }}" class="btn btn-primary">{{ __('Add Student') }}</a>
+                            <p>Faculties</p>
+                            <a href="{{ route('faculties.add') }}" class="btn btn-primary">{{ __('Add Faculty') }}</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -18,16 +18,16 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="students-table" class="table table-striped table-bordered" style="width:100%">
+                            <table id="faculties-table" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Enrollment No</th>
-                                        <th>Name</th>
-                                        <th>Mobile No</th>
-                                        <th>Email</th>
-                                        <th>Gender</th>
-                                        <th>Joining Date</th>
-                                        <th>Departure Date</th>
+                                        <th>id</td>
+                                        <th>name</td>
+                                        <th>course_name</td>
+                                        <th>subject_name</td>
+                                        <th>mobile_no</td>
+                                        <th>gender</td>
+                                        <th>joining_date</td>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -42,21 +42,21 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th>Enrollment No</th>
-                                        <th>Name</th>
-                                        <th>Mobile No</th>
-                                        <th>Email</th>
-                                        <th>Gender</th>
-                                        <th>Joining Date</th>
-                                        <th>Departure Date</th>
+                                        <th>id</td>
+                                        <th>name</td>
+                                        <th>course_name</td>
+                                        <th>subject_name</td>
+                                        <th>mobile_no</td>
+                                        <th>gender</td>
+                                        <th>joining_date</td>
                                         <th>Actions</th>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            @include('common.entries', ['records' => $students])
-                            @include('common.pagination', ['records' => $students])
+                            @include('common.entries', ['records' => $faculties])
+                            @include('common.pagination', ['records' => $faculties])
                         </div>
                     </div>
                 </div>
@@ -68,15 +68,15 @@
     @push('scripts')
         @php
             $options = [
-                'records_prefix' => 'students',
+                'records_prefix' => 'faculties',
                 'columns' => [
-                    ['data' => 'enrollment_no', 'name' => 'enrollment_no'],
+                    ['data' => 'id', 'name' => 'id'],
                     ['data' => 'name', 'name' => 'name'],
+                    ['data' => 'course_name', 'name' => 'course_name'],
+                    ['data' => 'subject_name', 'name' => 'subject_name'],
                     ['data' => 'mobile_no', 'name' => 'mobile_no'],
-                    ['data' => 'email', 'name' => 'email'],
                     ['data' => 'gender', 'name' => 'gender'],
                     ['data' => 'joining_date', 'name' => 'joining_date'],
-                    ['data' => 'departure_date', 'name' => 'departure_date'],
                     ['data' => 'actions', 'name' => 'actions', 'orderable' => false, 'searchable' => false],
                 ],
             ];

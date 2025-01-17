@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use App\Models\Exam;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -10,19 +10,19 @@ class ExamController extends Controller
 {
     public function index(Request $request)
     {
-        $students = Student::paginate($request->perpage ?? 10);
-        return view('students.index', compact('students'));
+        $exams = Exam::paginate($request->perpage ?? 10);
+        return view('exams.index', compact('exams'));
     }
 
     public function show($id)
     {
-        $student = Student::find($id);
-        return view('students.show', compact('student'));
+        $exam = Exam::find($id);
+        return view('exams.show', compact('exam'));
     }
 
     public function getData(Request $request)
     {
-        $query = Student::query();
+        $query = Exam::query();
 
         // Determine the offset and limit for custom pagination
         $page = $request->page > 0 ? $request->page : 1; // Default to page 1
@@ -35,14 +35,19 @@ class ExamController extends Controller
         if (!empty($request->search)) {
             $searchValue = $request->search;
             $query->where(function ($q) use ($searchValue) {
-                $q->where('name', 'like', "%{$searchValue}%")
-                    ->orWhere('enrollment_no', 'like', "%{$searchValue}%")
-                    ->orWhere('email', 'like', "%{$searchValue}%");
+                $q->where('title', 'like', "%{$searchValue}%")
+                    ->orWhere('course_id', 'like', "%{$searchValue}%")
+                    ->orWhere('subject_id', 'like', "%{$searchValue}%")
+                    ->orWhere('start', 'like', "%{$searchValue}%")
+                    ->orWhere('end', 'like', "%{$searchValue}%")
+                    ->orWhere('duration', 'like', "%{$searchValue}%")
+                    ->orWhere('total_marks', 'like', "%{$searchValue}%")
+                    ->orWhere('passing_marks', 'like', "%{$searchValue}%");
             });
         }
 
         // Get the total count for pagination (ignores skip and take)
-        $totalRecords = Student::count();
+        $totalRecords = Exam::count();
 
         // Get the total count after applying filters
         $filteredRecords = $query->count();
@@ -64,72 +69,59 @@ class ExamController extends Controller
             ->make(true);
     }
 
-    public function add()
+    public function create()
     {
-        return view('students.add-edit');
+        return view('exams.add-edit');
     }
 
     public function edit($id)
     {
-       $student = Student::find($id);
-       return view('students.add-edit',compact('student'));
+        $exam = Exam::find($id);
+        return view('exams.add-edit', compact('exam'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required|unique:students',
+            'title' => 'required',
             'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required|unique:students',
-            'mobile_no' => 'required',
-            'email' => 'required|email|unique:students',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'subject_id' => 'required',
+            'start' => 'required|date',
+            'end' => 'required|date',
+            'duration' => 'required',
+            'total_marks' => 'required',
+            'passing_marks' => 'required',
         ]);
 
-        Student::create($validated);
+        Exam::create($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student added successfully!');
+        return redirect()->route('exams.index')->with('success', 'Exam added successfully!');
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'enrollment_no' => 'required',
+            'title' => 'required',
             'course_id' => 'required',
-            'name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
-            'aadhaar_no' => 'required',
-            'mobile_no' => 'required',
-            'email' => 'required|email',
-            'gender' => 'required',
-            'dob' => 'required|date',
-            'about' => 'nullable',
-            'merital_status' => 'required',
-            'joining_date' => 'required|date',
-            'departure_date' => 'required|date',
+            'subject_id' => 'required',
+            'start' => 'required|date',
+            'end' => 'required|date',
+            'duration' => 'required',
+            'total_marks' => 'required',
+            'passing_marks' => 'required',
         ]);
 
-        $student = Student::findOrFail($id);
-        $student->update($validated);
+        $exam = Exam::find($id);
+        $exam->update($validated);
 
-        return redirect()->route('students.index')->with('success', 'Student updated successfully!');
+        return redirect()->route('exams.index')->with('success', 'Exam updated successfully!');
     }
 
     public function destroy($id)
     {
-       $student = Student::find($id);
-       $student->delete();
-       return redirect()->route('students.index');
+        $exam = Exam::find($id);
+        $exam->delete();
+
+        return redirect()->route('exams.index')->with('success', 'Exam deleted successfully!');
     }
-
-
 }

@@ -30,18 +30,15 @@ class Student extends Model
         'deleted_at'
     ];
 
-    public function attendance()
-    {
+    public function attendance(){
         return $this->hasMany(StudentAttendance::class, 'student_id', 'id');
     }
 
-    public function getJoiningDateAttribute($value)
-    {
+    public function getJoiningDateAttribute($value){
         return Carbon::parse($value)->format('d-m-Y');
     }
 
-    public function getDepartureDateAttribute($value)
-    {
+    public function getDepartureDateAttribute($value){
         return Carbon::parse($value)->format('d-m-Y');
     }
 }
